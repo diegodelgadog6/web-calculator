@@ -163,11 +163,13 @@ function updateHistoryDisplay() {
         return;
     }
     let currentDate = '';
+    let groupContainer = null;
+    let groupsCount = 0;
     history.forEach((item) => {
         if (item.date !== currentDate) {
             currentDate = item.date;
             const section = document.createElement('div');
-            section.className = 'pt-2';
+            section.className = groupsCount === 0 ? 'space-y-4' : 'space-y-4 pt-4';
             let dateLabel = 'TODAY';
             const today = new Date().toLocaleDateString('es-ES');
             const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('es-ES');
@@ -177,23 +179,35 @@ function updateHistoryDisplay() {
                 dateLabel = 'YESTERDAY';
             }
             const label = document.createElement('div');
-            label.className = 'text-[#6d6d72] text-xs tracking-[0.16em] font-bold uppercase mb-3';
+            label.className = 'text-[11px] font-bold tracking-[0.2em] uppercase text-[#767575] px-2';
             label.textContent = dateLabel;
             section.appendChild(label);
             activityLog.appendChild(section);
+            groupContainer = section;
+            groupsCount += 1;
         }
         const historyItem = document.createElement('div');
-        historyItem.className = 'bg-[#111317] border border-[#23252a] rounded-[28px] p-6 min-h-[160px] flex items-end justify-between';
+        historyItem.className = 'group bg-[#131313] hover:bg-[#1a1a1a] transition-all duration-300 rounded-3xl p-6 relative overflow-hidden';
         historyItem.innerHTML = `
-            <div class="self-start">
-                <div class="text-[#6f7177] text-sm">${item.time}</div>
+            <div class="flex justify-between items-start mb-4">
+                <span class="text-xs font-medium text-[#767575]">${item.time}</span>
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="p-2 rounded-lg bg-[#20201f] text-[#adaaaa] hover:text-[#ec944c] transition-colors" title="Copiar resultado" type="button">
+                        <span class="material-symbols-outlined text-lg">content_copy</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-[#20201f] text-[#adaaaa] hover:text-[#ec944c] transition-colors" title="Compartir" type="button">
+                        <span class="material-symbols-outlined text-lg">share</span>
+                    </button>
+                </div>
             </div>
-            <div class="flex flex-col items-end gap-1">
-                <div class="text-[#8f9096] text-[2rem] leading-none">${item.expression}</div>
-                <div class="text-white text-[3.5rem] leading-none font-bold">${formatNumber(String(item.result))}</div>
+            <div class="text-right">
+                <p class="text-[#adaaaa] font-medium text-lg tracking-tight mb-1">${item.expression}</p>
+                <p class="text-4xl font-bold tracking-tighter text-white">${formatNumber(String(item.result))}</p>
             </div>
         `;
-        activityLog.appendChild(historyItem);
+        if (groupContainer) {
+            groupContainer.appendChild(historyItem);
+        }
     });
 }
 

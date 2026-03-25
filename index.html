@@ -24,6 +24,16 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
         }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #484847;
+            border-radius: 10px;
+        }
         .nav-active {
             background: #20201f;
             color: #ec944c;
@@ -99,16 +109,18 @@
             </section>
         </section>
 
-        <section id="history-tab" class="tab hidden py-8">
-            <div class="text-[#777] text-sm tracking-[0.2em] uppercase font-bold mb-2">Activity Log</div>
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-5xl font-extrabold">History</h2>
-                <button type="button" onclick="clearHistory()" class="bg-[#23262c] text-[#e2e2e2] px-4 py-2 rounded-2xl text-sm font-semibold flex items-center gap-2 hover:bg-[#2a2f37] transition-colors">
-                    <span class="material-symbols-outlined text-[#ec944c] text-base">delete</span>
+        <section id="history-tab" class="tab hidden pt-8 pb-32">
+            <div class="mb-10 flex items-end justify-between">
+                <div>
+                    <h2 class="text-[#adaaaa] font-medium tracking-wide uppercase text-sm mb-1">Activity Log</h2>
+                    <h3 class="text-4xl font-black tracking-tight">History</h3>
+                </div>
+                <button type="button" onclick="clearHistory()" class="bg-[#20201f] text-[#adaaaa] px-4 py-2 rounded-xl text-sm font-semibold hover:text-white transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">delete_sweep</span>
                     Clear All
                 </button>
             </div>
-            <div id="activity-log" class="space-y-4 pb-10"></div>
+            <div id="activity-log" class="space-y-4 custom-scrollbar"></div>
         </section>
 
         <section id="settings-tab" class="tab hidden py-10">
