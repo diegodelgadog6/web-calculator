@@ -2,18 +2,23 @@ let display = '0';
 let previousValue = '';
 let operation = '';
 let shouldResetDisplay = false;
-let history = [];
+let calcHistory = [];
 
 function loadHistory() {
-    const saved = localStorage.getItem('calcHistory');
-    if (saved) {
-        history = JSON.parse(saved);
+    try {
+        const saved = localStorage.getItem('calcHistory');
+        if (saved) {
+            calcHistory = JSON.parse(saved);
+        }
+    } catch (error) {
+        calcHistory = [];
+        localStorage.removeItem('calcHistory');
     }
     updateRecentHistory();
 }
 
 function saveHistory() {
-    localStorage.setItem('calcHistory', JSON.stringify(history));
+    localStorage.setItem('calcHistory', JSON.stringify(calcHistory));
 }
 
 function handleClick(value) {
@@ -105,6 +110,9 @@ function getOperationSymbol(op) {
 function updateDisplay() {
     const resultDisplay = document.getElementById('result-display');
     const operationDisplay = document.getElementById('operation-display');
+    if (!resultDisplay || !operationDisplay) {
+        return;
+    }
     const formatted = formatNumber(display);
     resultDisplay.textContent = formatted;
     if (operation && previousValue) {
@@ -123,14 +131,14 @@ function formatNumber(num) {
 function addToHistory(expression, result) {
     const now = new Date();
     const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    history.unshift({
+    calcHistory.unshift({
         expression: expression,
         result: result,
         time: time,
         date: now.toLocaleDateString('es-ES')
     });
-    if (history.length > 50) {
-        history.pop();
+    if (calcHistory.length > 50) {
+        calcHistory.pop();
     }
     saveHistory();
     updateHistoryDisplay();
@@ -143,13 +151,13 @@ function updateRecentHistory() {
     if (!recentExpression || !recentResult) {
         return;
     }
-    if (history.length === 0) {
+    if (calcHistory.length === 0) {
         recentExpression.textContent = 'Sin operaciones';
         recentResult.textContent = '0';
         return;
     }
-    recentExpression.textContent = history[0].expression;
-    recentResult.textContent = formatNumber(String(history[0].result));
+    recentExpression.textContent = calcHistory[0].expression;
+    recentResult.textContent = formatNumber(String(calcHistory[0].result));
 }
 
 function updateHistoryDisplay() {
@@ -158,14 +166,14 @@ function updateHistoryDisplay() {
         return;
     }
     activityLog.innerHTML = '';
-    if (history.length === 0) {
+    if (calcHistory.length === 0) {
         activityLog.innerHTML = '<p class="text-[#8d8d92] text-center py-10">No hay historial</p>';
         return;
     }
     let currentDate = '';
     let groupContainer = null;
     let groupsCount = 0;
-    history.forEach((item) => {
+    calcHistory.forEach((item) => {
         if (item.date !== currentDate) {
             currentDate = item.date;
             const section = document.createElement('div');
@@ -213,7 +221,7 @@ function updateHistoryDisplay() {
 
 function clearHistory() {
     if (confirm('¿Estás seguro de que deseas borrar el historial?')) {
-        history = [];
+        calcHistory = [];
         localStorage.removeItem('calcHistory');
         updateHistoryDisplay();
         updateRecentHistory();
@@ -249,9 +257,50 @@ function showTab(tabName) {
 function toggleMenu() {
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function handleCalcAction(action) {
+    if (action === 'clear') {
+        clearAll();
+        return;
+    }
+    if (action === 'delete') {
+        deleteLast();
+        return;
+    }
+    if (action === '=') {
+        calculate();
+        return;
+    }
+    handleClick(action);
+}
+
+function initApp() {
+    document.addEventListener('click', (event) => {
+        const calcButton = event.target.closest('[data-calc]');
+        if (calcButton) {
+            handleCalcAction(calcButton.getAttribute('data-calc'));
+            return;
+        }
+
+        const tabButton = event.target.closest('[data-tab]');
+        if (tabButton) {
+            showTab(tabButton.getAttribute('data-tab'));
+            return;
+        }
+
+        if (event.target.closest('[data-action="clear-history"]')) {
+            clearHistory();
+            return;
+        }
+
+        if (event.target.closest('[data-action="menu"]')) {
+            toggleMenu();
+        }
+    });
+
     loadHistory();
     updateDisplay();
     updateHistoryDisplay();
     updateRecentHistory();
-});
+}
+
+initApp();

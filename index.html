@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script>
+        if (typeof tailwind !== 'undefined') {
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -20,9 +21,11 @@
                     }
                 }
             }
+        };
         }
     </script>
     <style>
+        .hidden { display: none !important; }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
         }
@@ -48,11 +51,11 @@
 <body class="bg-[#0e0e0e] text-white font-body min-h-screen flex flex-col">
     <header class="w-full sticky top-0 z-50 bg-[#0e0e0e]">
         <div class="max-w-lg mx-auto w-full px-6 py-4 flex justify-between items-center">
-            <button type="button" onclick="toggleMenu()" class="text-[#ec944c] p-2 rounded-full hover:bg-[#20201f] transition-colors">
+            <button type="button" data-action="menu" class="text-[#ec944c] p-2 rounded-full hover:bg-[#20201f] transition-colors">
                 <span class="material-symbols-outlined">menu</span>
             </button>
             <h1 class="font-headline font-extrabold tracking-tight text-5xl text-[#ec944c]">CALC</h1>
-            <button type="button" onclick="showTab('settings')" class="text-[#ec944c] p-2 rounded-full hover:bg-[#20201f] transition-colors">
+            <button type="button" data-tab="settings" class="text-[#ec944c] p-2 rounded-full hover:bg-[#20201f] transition-colors">
                 <span class="material-symbols-outlined">settings</span>
             </button>
         </div>
@@ -68,31 +71,31 @@
 
             <section class="bg-[#131313] p-4 rounded-[2rem] shadow-inner">
                 <div class="grid grid-cols-4 gap-3">
-                    <button onclick="clearAll()" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">AC</button>
-                    <button onclick="deleteLast()" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">
+                    <button type="button" data-calc="clear" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">AC</button>
+                    <button type="button" data-calc="delete" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">
                         <span class="material-symbols-outlined">backspace</span>
                     </button>
-                    <button onclick="handleClick('%')" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">%</button>
-                    <button onclick="handleClick('/')" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">÷</button>
+                    <button type="button" data-calc="%" class="bg-[#50545b] text-[#e2e2e2] h-20 rounded-2xl flex items-center justify-center text-xl font-bold active:scale-95 transition-all">%</button>
+                    <button type="button" data-calc="/" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">÷</button>
 
-                    <button onclick="handleClick(7)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">7</button>
-                    <button onclick="handleClick(8)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">8</button>
-                    <button onclick="handleClick(9)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">9</button>
-                    <button onclick="handleClick('*')" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">×</button>
+                    <button type="button" data-calc="7" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">7</button>
+                    <button type="button" data-calc="8" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">8</button>
+                    <button type="button" data-calc="9" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">9</button>
+                    <button type="button" data-calc="*" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">×</button>
 
-                    <button onclick="handleClick(4)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">4</button>
-                    <button onclick="handleClick(5)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">5</button>
-                    <button onclick="handleClick(6)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">6</button>
-                    <button onclick="handleClick('-')" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">−</button>
+                    <button type="button" data-calc="4" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">4</button>
+                    <button type="button" data-calc="5" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">5</button>
+                    <button type="button" data-calc="6" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">6</button>
+                    <button type="button" data-calc="-" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">−</button>
 
-                    <button onclick="handleClick(1)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">1</button>
-                    <button onclick="handleClick(2)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">2</button>
-                    <button onclick="handleClick(3)" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">3</button>
-                    <button onclick="handleClick('+')" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">+</button>
+                    <button type="button" data-calc="1" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">1</button>
+                    <button type="button" data-calc="2" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">2</button>
+                    <button type="button" data-calc="3" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">3</button>
+                    <button type="button" data-calc="+" class="bg-[#563225] text-[#ec944c] h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">+</button>
 
-                    <button onclick="handleClick(0)" class="col-span-2 bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">0</button>
-                    <button onclick="handleClick('.')" class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">.</button>
-                    <button onclick="calculate()" class="bg-[#ec944c] text-[#1a130c] h-20 rounded-2xl flex items-center justify-center text-3xl font-black shadow-[0_0_20px_rgba(236,148,76,0.32)] active:scale-95 transition-all">=</button>
+                    <button type="button" data-calc="0" class="col-span-2 bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">0</button>
+                    <button type="button" data-calc="." class="bg-[#20201f] text-white h-20 rounded-2xl flex items-center justify-center text-2xl font-bold active:scale-95 transition-all">.</button>
+                    <button type="button" data-calc="=" class="bg-[#ec944c] text-[#1a130c] h-20 rounded-2xl flex items-center justify-center text-3xl font-black shadow-[0_0_20px_rgba(236,148,76,0.32)] active:scale-95 transition-all">=</button>
                 </div>
             </section>
 
@@ -103,7 +106,7 @@
                         <p id="recent-expression" class="text-[#b4b4b9] text-xs font-semibold">Sin operaciones</p>
                         <p id="recent-result" class="text-white text-5xl leading-none font-bold">0</p>
                     </div>
-                    <button type="button" onclick="showTab('history')" class="bg-[#151515] p-4 rounded-3xl flex flex-col justify-center items-center border border-[#2b2b2b] hover:bg-[#20201f] transition-colors">
+                    <button type="button" data-tab="history" class="bg-[#151515] p-4 rounded-3xl flex flex-col justify-center items-center border border-[#2b2b2b] hover:bg-[#20201f] transition-colors">
                         <span class="material-symbols-outlined text-[#ec944c] mb-1">history</span>
                         <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-[#b4b4b9]">View All</p>
                     </button>
@@ -117,7 +120,7 @@
                     <h2 class="text-[#adaaaa] font-medium tracking-wide uppercase text-sm mb-1">Activity Log</h2>
                     <h3 class="text-4xl font-black tracking-tight">History</h3>
                 </div>
-                <button type="button" onclick="clearHistory()" class="bg-[#20201f] text-[#adaaaa] px-4 py-2 rounded-xl text-sm font-semibold hover:text-white transition-colors flex items-center gap-2">
+                <button type="button" data-action="clear-history" class="bg-[#20201f] text-[#adaaaa] px-4 py-2 rounded-xl text-sm font-semibold hover:text-white transition-colors flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">delete_sweep</span>
                     Clear All
                 </button>
@@ -133,21 +136,328 @@
 
     <nav class="fixed bottom-0 left-0 w-full bg-[#0e0e0e] border-t border-[#2a2a2a] rounded-t-[24px] px-4 pb-6 pt-3 z-50">
         <div class="max-w-lg mx-auto w-full grid grid-cols-[1.2fr_1fr_1fr] gap-2">
-            <button type="button" class="nav-btn nav-active flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="calculator" onclick="showTab('calculator')">
+            <button type="button" class="nav-btn nav-active flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="calculator">
                 <span class="material-symbols-outlined">calculate</span>
                 <span class="text-[11px] font-semibold uppercase tracking-[0.18em] mt-1">Calculator</span>
             </button>
-            <button type="button" class="nav-btn nav-inactive flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="history" onclick="showTab('history')">
+            <button type="button" class="nav-btn nav-inactive flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="history">
                 <span class="material-symbols-outlined">history</span>
                 <span class="text-[11px] font-semibold uppercase tracking-[0.18em] mt-1">History</span>
             </button>
-            <button type="button" class="nav-btn nav-inactive flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="settings" onclick="showTab('settings')">
+            <button type="button" class="nav-btn nav-inactive flex flex-col items-center justify-center rounded-[24px] px-4 py-2 transition-all" data-tab="settings">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="text-[11px] font-semibold uppercase tracking-[0.18em] mt-1">Settings</span>
             </button>
         </div>
     </nav>
 
-    <script src="./scripts.js"></script>
+    <script>
+let display = '0';
+let previousValue = '';
+let operation = '';
+let shouldResetDisplay = false;
+let calcHistory = [];
+
+function loadHistory() {
+    try {
+        const saved = localStorage.getItem('calcHistory');
+        if (saved) {
+            calcHistory = JSON.parse(saved);
+        }
+    } catch (error) {
+        calcHistory = [];
+        localStorage.removeItem('calcHistory');
+    }
+    updateRecentHistory();
+}
+
+function saveHistory() {
+    localStorage.setItem('calcHistory', JSON.stringify(calcHistory));
+}
+
+function handleClick(value) {
+    if (/[0-9.]/.test(value)) {
+        if (shouldResetDisplay) {
+            display = String(value);
+            shouldResetDisplay = false;
+        } else {
+            if (value === '.' && display.includes('.')) return;
+            display = display === '0' ? String(value) : display + value;
+        }
+        updateDisplay();
+    } else if (['+', '-', '*', '/', '%'].includes(value)) {
+        if (previousValue === '' && display !== '') {
+            previousValue = display;
+            operation = value;
+            shouldResetDisplay = true;
+        } else if (previousValue !== '' && operation !== '' && display !== '') {
+            const result = performCalculation(parseFloat(previousValue), parseFloat(display), operation);
+            display = String(result);
+            previousValue = String(result);
+            operation = value;
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+    }
+}
+
+function deleteLast() {
+    if (display.length > 1) {
+        display = display.slice(0, -1);
+    } else {
+        display = '0';
+    }
+    updateDisplay();
+}
+
+function clearAll() {
+    display = '0';
+    previousValue = '';
+    operation = '';
+    shouldResetDisplay = false;
+    updateDisplay();
+}
+
+function calculate() {
+    if (operation && previousValue !== '' && display !== '') {
+        const a = parseFloat(previousValue);
+        const b = parseFloat(display);
+        const expression = `${previousValue} ${getOperationSymbol(operation)} ${display}`;
+        const result = performCalculation(a, b, operation);
+        addToHistory(expression, result);
+        display = String(result);
+        previousValue = '';
+        operation = '';
+        shouldResetDisplay = true;
+        updateDisplay();
+    }
+}
+
+function performCalculation(a, b, op) {
+    switch (op) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+        case '/':
+            return b !== 0 ? a / b : 0;
+        case '%':
+            return a % b;
+        default:
+            return b;
+    }
+}
+
+function getOperationSymbol(op) {
+    const symbols = {
+        '+': '+',
+        '-': '−',
+        '*': '×',
+        '/': '÷',
+        '%': '%'
+    };
+    return symbols[op] || op;
+}
+
+function updateDisplay() {
+    const resultDisplay = document.getElementById('result-display');
+    const operationDisplay = document.getElementById('operation-display');
+    if (!resultDisplay || !operationDisplay) {
+        return;
+    }
+    const formatted = formatNumber(display);
+    resultDisplay.textContent = formatted;
+    if (operation && previousValue) {
+        operationDisplay.textContent = `${formatNumber(previousValue)} ${getOperationSymbol(operation)}`;
+    } else {
+        operationDisplay.textContent = '';
+    }
+}
+
+function formatNumber(num) {
+    const parts = num.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+}
+
+function addToHistory(expression, result) {
+    const now = new Date();
+    const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    calcHistory.unshift({
+        expression: expression,
+        result: result,
+        time: time,
+        date: now.toLocaleDateString('es-ES')
+    });
+    if (calcHistory.length > 50) {
+        calcHistory.pop();
+    }
+    saveHistory();
+    updateHistoryDisplay();
+    updateRecentHistory();
+}
+
+function updateRecentHistory() {
+    const recentExpression = document.getElementById('recent-expression');
+    const recentResult = document.getElementById('recent-result');
+    if (!recentExpression || !recentResult) {
+        return;
+    }
+    if (calcHistory.length === 0) {
+        recentExpression.textContent = 'Sin operaciones';
+        recentResult.textContent = '0';
+        return;
+    }
+    recentExpression.textContent = calcHistory[0].expression;
+    recentResult.textContent = formatNumber(String(calcHistory[0].result));
+}
+
+function updateHistoryDisplay() {
+    const activityLog = document.getElementById('activity-log');
+    if (!activityLog) {
+        return;
+    }
+    activityLog.innerHTML = '';
+    if (calcHistory.length === 0) {
+        activityLog.innerHTML = '<p class="text-[#8d8d92] text-center py-10">No hay historial</p>';
+        return;
+    }
+    let currentDate = '';
+    let groupContainer = null;
+    let groupsCount = 0;
+    calcHistory.forEach((item) => {
+        if (item.date !== currentDate) {
+            currentDate = item.date;
+            const section = document.createElement('div');
+            section.className = groupsCount === 0 ? 'space-y-4' : 'space-y-4 pt-4';
+            let dateLabel = 'TODAY';
+            const today = new Date().toLocaleDateString('es-ES');
+            const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('es-ES');
+            if (item.date === today) {
+                dateLabel = 'TODAY';
+            } else if (item.date === yesterday) {
+                dateLabel = 'YESTERDAY';
+            }
+            const label = document.createElement('div');
+            label.className = 'text-[11px] font-bold tracking-[0.2em] uppercase text-[#767575] px-2';
+            label.textContent = dateLabel;
+            section.appendChild(label);
+            activityLog.appendChild(section);
+            groupContainer = section;
+            groupsCount += 1;
+        }
+        const historyItem = document.createElement('div');
+        historyItem.className = 'group bg-[#131313] hover:bg-[#1a1a1a] transition-all duration-300 rounded-3xl p-6 relative overflow-hidden';
+        historyItem.innerHTML = `
+            <div class="flex justify-between items-start mb-4">
+                <span class="text-xs font-medium text-[#767575]">${item.time}</span>
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="p-2 rounded-lg bg-[#20201f] text-[#adaaaa] hover:text-[#ec944c] transition-colors" title="Copiar resultado" type="button">
+                        <span class="material-symbols-outlined text-lg">content_copy</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-[#20201f] text-[#adaaaa] hover:text-[#ec944c] transition-colors" title="Compartir" type="button">
+                        <span class="material-symbols-outlined text-lg">share</span>
+                    </button>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-[#adaaaa] font-medium text-lg tracking-tight mb-1">${item.expression}</p>
+                <p class="text-4xl font-bold tracking-tighter text-white">${formatNumber(String(item.result))}</p>
+            </div>
+        `;
+        if (groupContainer) {
+            groupContainer.appendChild(historyItem);
+        }
+    });
+}
+
+function clearHistory() {
+    if (confirm('¿Estás seguro de que deseas borrar el historial?')) {
+        calcHistory = [];
+        localStorage.removeItem('calcHistory');
+        updateHistoryDisplay();
+        updateRecentHistory();
+    }
+}
+
+function showTab(tabName) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    });
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.classList.remove('nav-active');
+        btn.classList.add('nav-inactive');
+    });
+    const selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+        selectedTab.classList.remove('hidden');
+        selectedTab.classList.add('active');
+    }
+    const activeBtn = document.querySelector(`.nav-btn[data-tab="${tabName}"]`);
+    if (activeBtn) {
+        activeBtn.classList.remove('nav-inactive');
+        activeBtn.classList.add('nav-active');
+    }
+    if (tabName === 'history') {
+        updateHistoryDisplay();
+    }
+}
+
+function toggleMenu() {
+}
+
+function handleCalcAction(action) {
+    if (action === 'clear') {
+        clearAll();
+        return;
+    }
+    if (action === 'delete') {
+        deleteLast();
+        return;
+    }
+    if (action === '=') {
+        calculate();
+        return;
+    }
+    handleClick(action);
+}
+
+function initApp() {
+    document.addEventListener('click', (event) => {
+        const calcButton = event.target.closest('[data-calc]');
+        if (calcButton) {
+            handleCalcAction(calcButton.getAttribute('data-calc'));
+            return;
+        }
+
+        const tabButton = event.target.closest('[data-tab]');
+        if (tabButton) {
+            showTab(tabButton.getAttribute('data-tab'));
+            return;
+        }
+
+        if (event.target.closest('[data-action="clear-history"]')) {
+            clearHistory();
+            return;
+        }
+
+        if (event.target.closest('[data-action="menu"]')) {
+            toggleMenu();
+        }
+    });
+
+    loadHistory();
+    updateDisplay();
+    updateHistoryDisplay();
+    updateRecentHistory();
+}
+
+initApp();
+    </script>
 </body>
 </html>
